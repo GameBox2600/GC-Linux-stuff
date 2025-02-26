@@ -1,0 +1,52 @@
+Step 1: Partition the SD Card
+1 Open fdisk to modify partitions
+
+bash
+Copy
+Edit
+sudo fdisk /dev/sdb
+2 Delete Existing Partitions (if needed) If your SD card has old partitions, delete them:
+
+Press d (to delete)
+Press 1, then d again for partition 2.
+3 Create New Partitions
+
+Press n (new partition)
+
+Press p (primary)
+
+Press 1 (first partition)
+
+Set the size to +300M for FAT32.
+
+Press n again (new partition)
+
+Press p (primary)
+
+Press 2 (second partition)
+
+Press Enter twice to use the rest of the SD card.
+
+4 Change Filesystem Types
+
+Press t, then 1, and enter c (W95 FAT32 LBA).
+Press t, then 2, and enter 83 (Linux EXT3).
+5 Write Changes and Exit
+
+Press w (write changes).
+
+sudo mkfs.vfat -F 32 /dev/sdb1
+
+sudo mkfs.ext3 -O ^metadata_csum /dev/sdb2
+
+sudo mount /dev/sdb2 /mnt
+
+sudo dd if=mydebian.img of=/dev/sdb2 bs=4M status=progress
+
+sudo umount /dev/sdb2
+
+sudo resize2fs /dev/sdb2
+
+Step 5: Copy Kernel .dol to /dev/sdb1
+
+
